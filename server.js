@@ -43,5 +43,5 @@ app.get("/", (req, res) => {
 })
 
 // --- Server ---
-const PORT = process.env.PORT || 5501
+const PORT = process.env.PORT || 5500
 app.listen(PORT, () => console.log(`app listening on localhost:${PORT}`))
