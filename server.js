@@ -28,3 +28,20 @@ const host = process.env.HOST
 app.listen(port, () => {
   console.log(`app listening on ${host}:${port}`)
 })
+const path = require("path")
+
+// --- View engine: EJS ---
+app.set("view engine", "ejs")
+app.set("views", path.join(__dirname, "views"))
+
+// (optional) serve /public for css/images later
+app.use(express.static(path.join(__dirname, "public")))
+
+// --- Home route ---
+app.get("/", (req, res) => {
+  res.render("index", { title: "CSE 340 Home" })
+})
+
+// --- Server ---
+const PORT = process.env.PORT || 5500
+app.listen(PORT, () => console.log(`app listening on localhost:${PORT}`))
