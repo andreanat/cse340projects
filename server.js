@@ -1,47 +1,35 @@
 /* ******************************************
- * This server.js file is the primary file of the 
- * application. It is used to control the project.
- *******************************************/
-/* ***********************
- * Require Statements
- *************************/
-const express = require("express")
-const env = require("dotenv").config()
-const app = express()
-const static = require("./routes/static")
+ * Primary server file for CSE 340
+ * ******************************************/
+const path = require("path");
+const express = require("express");
+const expressLayouts = require("express-ejs-layouts");
+require("dotenv").config();
 
-/* ***********************
- * Routes
- *************************/
-app.use(static)
+const app = express();
 
-/* ***********************
- * Local Server Information
- * Values from .env (environment) file
- *************************/
-const port = process.env.PORT
-const host = process.env.HOST
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(expressLayouts);
+app.set("layout", "layout/layout");
 
-/* ***********************
- * Log statement to confirm server operation
- *************************/
-app.listen(port, () => {
-  console.log(`app listening on ${host}:${port}`)
-})
-const path = require("path")
+app.use(express.static(path.join(__dirname, "public")));
 
-// --- View engine: EJS ---
-app.set("view engine", "ejs")
-app.set("views", path.join(__dirname, "views"))
-
-// (optional) serve /public for css/images later
-app.use(express.static(path.join(__dirname, "public")))
-
-// --- Home route ---
 app.get("/", (req, res) => {
-  res.render("index", { title: "CSE 340 Home" })
-})
+  res.render("index", { title: "CSE Motors" });
+});
 
-// --- Server ---
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log(`app listening on localhost:${PORT}`))
+app.use((req, res) => {
+  res.status(404).render("index", { title: "Not Found" });
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).render("index", { title: "Server Error" });
+});
+
+const PORT = process.env.PORT || 5500;
+const HOST = process.env.HOST || "localhost";
+app.listen(PORT, () => {
+  console.log(`app listening on http://${HOST}:${PORT}`);
+});
