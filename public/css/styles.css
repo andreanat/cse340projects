@@ -185,3 +185,21 @@ a:focus-visible,button:focus-visible{
     grid-column: span 1;
   }
 }
+
+:root {
+  --ink: #2b2130;      
+}
+
+.site-header .brand {
+  color: #241a2a;      
+}
+
+.site-nav a {
+  color: #1f2a3a;               
+  background: #cfe8f6;          
+  border: 1px solid #7fb6cf;     
+}
+
+.site-footer, .site-footer p {
+  color: #2b2130;
+}
