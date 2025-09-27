@@ -1,13 +1,10 @@
-/* ===== Clean slate (optional in pgAdmin; harmless if on empty DB) ===== */
 DROP TABLE IF EXISTS inventory CASCADE;
 DROP TABLE IF EXISTS classification CASCADE;
 DROP TABLE IF EXISTS account CASCADE;
 DROP TYPE IF EXISTS account_type;
 
-/* ===== 1) Type ===== */
 CREATE TYPE account_type AS ENUM ('Client', 'Employee', 'Admin');
 
-/* ===== 2) Tables ===== */
 CREATE TABLE account (
   account_id        SERIAL PRIMARY KEY,
   account_firstname VARCHAR(50)  NOT NULL,
@@ -36,7 +33,6 @@ CREATE TABLE inventory (
   classification_id INT         NOT NULL REFERENCES classification(classification_id)
 );
 
-/* ===== 3) Seed data ===== */
 INSERT INTO classification (classification_name)
 VALUES ('Sport'), ('SUV'), ('Truck'), ('Sedan'), ('Classic');
 
