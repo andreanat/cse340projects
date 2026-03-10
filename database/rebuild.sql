@@ -3,7 +3,7 @@ DROP TABLE IF EXISTS classification CASCADE;
 DROP TABLE IF EXISTS account CASCADE;
 DROP TYPE IF EXISTS account_type;
 
-CREATE TYPE account_type AS ENUM ('Client', 'Emplye', 'Admin');
+CREATE TYPE account_type AS ENUM ('Client', 'Employee', 'Admin');
 
 CREATE TABLE account (
   account_id        SERIAL PRIMARY KEY,
