@@ -124,3 +124,17 @@ h1, h2 {
     order: 1;
   }
 }
+nav ul {
+  list-style: none;
+  padding: 0;
+}
+
+nav li {
+  display: inline-block;
+  margin-right: 12px;
+}
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
