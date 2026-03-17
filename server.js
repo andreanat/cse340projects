@@ -5,7 +5,7 @@ const path = require("path");
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 require("dotenv").config();
-
+const baseController = require("./controllers/baseController");
 const app = express();
 
 app.set("view engine", "ejs");
@@ -15,9 +15,10 @@ app.set("layout", "layout/layout");
 
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-  res.render("index", { title: "CSE Motors" });
-});
+/* ***********************
+ * Home route
+ * *********************** */
+app.get("/", baseController.buildHome);
 
 app.use((req, res) => {
   res.status(404).render("index", { title: "Not Found" });
