@@ -138,3 +138,20 @@ main {
   margin: 0 auto;
   padding: 1rem;
 }
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.vehicle-card {
+  background: #f5f5f5;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.vehicle-card img {
+  max-width: 100%;
+  height: auto;
+}
