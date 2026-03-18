@@ -1,7 +1,17 @@
 <h1><%= title %></h1>
 
-<ul>
+<% if (data.rows.length === 0) { %>
+  <p>No vehicles found for this classification.</p>
+<% } %>
+
+<div class="vehicle-grid">
   <% data.rows.forEach(vehicle => { %>
-    <li><%= vehicle.inv_make %> <%= vehicle.inv_model %></li>
+    <div class="vehicle-card">
+      <img src="<%= vehicle.inv_image %>" alt="<%= vehicle.inv_make %> <%= vehicle.inv_model %>">
+
+      <h2><%= vehicle.inv_make %> <%= vehicle.inv_model %></h2>
+
+      <p>$<%= vehicle.inv_price %></p>
+    </div>
   <% }) %>
-</ul>
+</div>
