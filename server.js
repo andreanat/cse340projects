@@ -1,38 +1,61 @@
 /* ******************************************
  * Primary server file for CSE 340
  * ******************************************/
-const path = require("path");
-const express = require("express");
-const expressLayouts = require("express-ejs-layouts");
-require("dotenv").config();
-const baseController = require("./controllers/baseController");
-const app = express();
+const utilities = require("./utilities/")
+const path = require("path")
+const express = require("express")
+const expressLayouts = require("express-ejs-layouts")
+require("dotenv").config()
+const baseController = require("./controllers/baseController")
 const invRoute = require("./routes/inventoryRoute")
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(expressLayouts);
-app.set("layout", "layout/layout");
+const app = express()
 
-app.use(express.static(path.join(__dirname, "public")));
+app.set("view engine", "ejs")
+app.set("views", path.join(__dirname, "views"))
+app.use(expressLayouts)
+app.set("layout", "layout/layout")
+
+app.use(express.static(path.join(__dirname, "public")))
 app.use("/inv", invRoute)
 
 /* ***********************
  * Home route
  * *********************** */
-app.get("/", baseController.buildHome);
+app.get("/", utilities.handleErrors(baseController.buildHome))
 
-app.use((req, res) => {
-  res.status(404).render("index", { title: "Not Found" });
-});
+/* ************************************
+ * File Not Found Route
+ * Must be last route in the list
+ * ************************************ */
+app.use(async (req, res, next) => {
+  next({ status: 404, message: "Sorry, we appear to have lost that page." })
+})
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).render("index", { title: "Server Error" });
-});
+/* ***********************
+ * Express Error Handler
+ * Place after all other middleware
+ *************************/
+app.use(async (err, req, res, next) => {
+  let nav = await utilities.getNav()
+  console.error(`Error at: "${req.originalUrl}": ${err.message}`)
 
-const PORT = process.env.PORT || 5500;
-const HOST = process.env.HOST || "localhost";
+  let message
+  if (err.status == 404) {
+    message = err.message
+  } else {
+    message = "Oh no! There was a crash. Maybe try a different route?"
+  }
+
+  res.render("errors/error", {
+    title: err.status || "Server Error",
+    message,
+    nav
+  })
+})
+
+const PORT = process.env.PORT || 5500
+const HOST = process.env.HOST || "localhost"
 app.listen(PORT, () => {
-  console.log(`app listening on http://${HOST}:${PORT}`);
-});
+  console.log(`app listening on http://${HOST}:${PORT}`)
+})
