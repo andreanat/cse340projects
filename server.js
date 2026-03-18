@@ -7,6 +7,7 @@ const expressLayouts = require("express-ejs-layouts");
 require("dotenv").config();
 const baseController = require("./controllers/baseController");
 const app = express();
+const invRoute = require("./routes/inventoryRoute")
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -14,6 +15,7 @@ app.use(expressLayouts);
 app.set("layout", "layout/layout");
 
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/inv", invRoute)
 
 /* ***********************
  * Home route

@@ -5,5 +5,13 @@ async function getClassifications(){
     "SELECT * FROM public.classification ORDER BY classification_name"
   )
 }
-
-module.exports = { getClassifications }
+async function getInventoryByClassificationId(classification_id) {
+  return await pool.query(
+    "SELECT * FROM public.inventory WHERE classification_id = $1",
+    [classification_id]
+  )
+}
+module.exports = {
+  getClassifications,
+  getInventoryByClassificationId
+}

@@ -1,0 +1,7 @@
+<h1><%= title %></h1>
+
+<ul>
+  <% data.rows.forEach(vehicle => { %>
+    <li><%= vehicle.inv_make %> <%= vehicle.inv_model %></li>
+  <% }) %>
+</ul>
