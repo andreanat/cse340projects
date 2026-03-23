@@ -155,3 +155,36 @@ main {
   max-width: 100%;
   height: auto;
 }
+.vehicle-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.vehicle-detail_image img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.vehicle-detail_info {
+  width: 100%;
+}
+
+.vehicle-detail_info h2 {
+  margin-top: 0;
+}
+
+@media screen and (min-width: 768px) {
+  .vehicle-detail {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .vehicle-detail_image,
+  .vehicle-detail_info {
+    width: 50%;
+  }
+}

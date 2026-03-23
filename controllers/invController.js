@@ -34,10 +34,13 @@ invController.buildByInventoryId = async function (req, res, next) {
       nav,
       vehicleHTML
     })
-
   } catch (error) {
     next(error)
   }
+}
+
+invController.triggerError = async function (req, res, next) {
+  throw new Error("Intentional 500 error")
 }
 
 module.exports = invController
