@@ -8,8 +8,31 @@ const expressLayouts = require("express-ejs-layouts")
 require("dotenv").config()
 const baseController = require("./controllers/baseController")
 const invRoute = require("./routes/inventoryRoute")
+const session = require("express-session")
+const pool = require("./database/")
 
 const app = express()
+
+/* ***********************
+ * Middleware
+ * ************************/
+app.use(session({
+  store: new (require('connect-pg-simple')(session))({
+    createTableIfMissing: true,
+    pool,
+  }),
+  secret: process.env.SESSION_SECRET,
+  resave: true,
+  saveUninitialized: true,
+  name: 'sessionId',
+}))
+
+// Express Messages Middleware
+app.use(require('connect-flash')())
+app.use(function(req, res, next){
+  res.locals.messages = require('express-messages')(req, res)
+  next()
+})
 
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
