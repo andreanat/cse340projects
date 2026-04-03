@@ -2,6 +2,15 @@ const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 
 const invController = {}
+invController.buildManagement = async function (req, res, next) {
+  const nav = await utilities.getNav()
+
+  res.render("inventory/management", {
+    title: "Inventory Management",
+    nav,
+    errors: null,
+  })
+}
 
 invController.buildByClassificationId = async function (req, res) {
   const classification_id = req.params.classificationId

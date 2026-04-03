@@ -5,6 +5,11 @@ const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 
 router.get(
+  "/",
+  utilities.handleErrors(invController.buildManagement)
+)
+
+router.get(
   "/type/:classificationId",
   utilities.handleErrors(invController.buildByClassificationId)
 )
