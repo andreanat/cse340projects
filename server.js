@@ -8,16 +8,19 @@ const expressLayouts = require("express-ejs-layouts")
 require("dotenv").config()
 const baseController = require("./controllers/baseController")
 const invRoute = require("./routes/inventoryRoute")
+const accountRoute = require("./routes/accountRoute")
 const session = require("express-session")
 const pool = require("./database/")
-const accountRoute = require("./routes/accountRoute")
-const app = express()
 const bodyParser = require("body-parser")
+
+const app = express()
+
 /* ***********************
  * Middleware
  * ************************/
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -29,25 +32,35 @@ app.use(session({
   name: 'sessionId',
 }))
 
-app.use("/account", accountRoute)
-// Express Messages Middleware
+// Flash messages (MUST be before routes)
 app.use(require('connect-flash')())
 app.use(function(req, res, next){
   res.locals.messages = require('express-messages')(req, res)
   next()
 })
 
+/* ***********************
+ * View Engine and Layout
+ * ************************/
 app.set("view engine", "ejs")
 app.set("views", path.join(__dirname, "views"))
 app.use(expressLayouts)
 app.set("layout", "layout/layout")
 
+/* ***********************
+ * Static Files
+ * ************************/
 app.use(express.static(path.join(__dirname, "public")))
+
+/* ***********************
+ * Routes
+ * ************************/
+app.use("/account", accountRoute)
 app.use("/inv", invRoute)
 
 /* ***********************
  * Home route
- * *********************** */
+ * ************************/
 app.get("/", utilities.handleErrors(baseController.buildHome))
 
 /* ************************************
@@ -82,6 +95,7 @@ app.use(async (err, req, res, next) => {
 
 const PORT = process.env.PORT || 5500
 const HOST = process.env.HOST || "localhost"
+
 app.listen(PORT, () => {
   console.log(`app listening on http://${HOST}:${PORT}`)
 })
