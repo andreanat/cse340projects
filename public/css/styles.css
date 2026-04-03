@@ -220,3 +220,19 @@ nav a {
     width: 50%;
   }
 }
+.hdr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  text-decoration: none;
+  color: inherit;
+}
+
+.account-link {
+  font-weight: bold;
+  text-decoration: none;
+  color: #102542;
+}
