@@ -10,12 +10,14 @@ const baseController = require("./controllers/baseController")
 const invRoute = require("./routes/inventoryRoute")
 const session = require("express-session")
 const pool = require("./database/")
-
+const accountRoute = require("./routes/accountRoute")
 const app = express()
-
+const bodyParser = require("body-parser")
 /* ***********************
  * Middleware
  * ************************/
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(session({
   store: new (require('connect-pg-simple')(session))({
     createTableIfMissing: true,
@@ -27,6 +29,7 @@ app.use(session({
   name: 'sessionId',
 }))
 
+app.use("/account", accountRoute)
 // Express Messages Middleware
 app.use(require('connect-flash')())
 app.use(function(req, res, next){

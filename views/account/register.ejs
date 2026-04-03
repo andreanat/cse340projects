@@ -2,6 +2,14 @@
 
 <%- messages() %>
 
+<% if (errors) { %>
+  <ul class="notice">
+    <% errors.array().forEach(error => { %>
+      <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+<% } %>
+
 <form action="/account/register" method="post">
   <label for="account_firstname">First Name</label>
   <input
@@ -9,6 +17,7 @@
     name="account_firstname"
     id="account_firstname"
     required
+    value="<%= typeof account_firstname != 'undefined' ? account_firstname : '' %>"
   >
 
   <label for="account_lastname">Last Name</label>
@@ -17,6 +26,7 @@
     name="account_lastname"
     id="account_lastname"
     required
+    value="<%= typeof account_lastname != 'undefined' ? account_lastname : '' %>"
   >
 
   <label for="account_email">Email</label>
@@ -25,6 +35,7 @@
     name="account_email"
     id="account_email"
     required
+    value="<%= typeof account_email != 'undefined' ? account_email : '' %>"
   >
 
   <label for="account_password">Password</label>
