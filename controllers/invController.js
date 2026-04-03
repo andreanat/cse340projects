@@ -51,5 +51,37 @@ invController.buildByInventoryId = async function (req, res, next) {
 invController.triggerError = async function (req, res, next) {
   throw new Error("Intentional 500 error")
 }
+invController.buildAddClassification = async function (req, res, next) {
+  const nav = await utilities.getNav()
 
+  res.render("inventory/add-classification", {
+    title: "Add New Classification",
+    nav,
+    errors: null,
+  })
+}
+
+invController.addClassification = async function (req, res) {
+  const nav = await utilities.getNav()
+  const { classification_name } = req.body
+
+  const addResult = await invModel.addClassification(classification_name)
+
+  if (addResult) {
+    req.flash("notice", `The ${classification_name} classification was successfully added.`)
+    const nav = await utilities.getNav()
+    res.render("inventory/management", {
+      title: "Inventory Management",
+      nav,
+      errors: null,
+    })
+  } else {
+    req.flash("notice", "Sorry, the classification was not added.")
+    res.status(501).render("inventory/add-classification", {
+      title: "Add New Classification",
+      nav,
+      errors: null,
+    })
+  }
+}
 module.exports = invController

@@ -3,6 +3,7 @@ const router = new express.Router()
 
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
+const invValidate = require("../utilities/inventory-validation")
 
 router.get(
   "/",
@@ -24,4 +25,15 @@ router.get(
   utilities.handleErrors(invController.triggerError)
 )
 
+router.get(
+  "/add-classification",
+  utilities.handleErrors(invController.buildAddClassification)
+)
+
+router.post(
+  "/add-classification",
+  invValidate.classificationRules(),
+  invValidate.checkClassificationData,
+  utilities.handleErrors(invController.addClassification)
+)
 module.exports = router
