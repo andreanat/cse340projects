@@ -32,11 +32,42 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
-// 🔐 Protected account management route
+// Logout process
+router.get(
+  "/logout",
+  utilities.handleErrors(accountController.accountLogout)
+)
+
+// Protected account management route
 router.get(
   "/",
   utilities.checkLogin,
   utilities.handleErrors(accountController.buildManagement)
+)
+
+// Deliver account update view
+router.get(
+  "/update/:account_id",
+  utilities.checkLogin,
+  utilities.handleErrors(accountController.buildUpdateAccountView)
+)
+
+// Process account information update
+router.post(
+  "/update/",
+  utilities.checkLogin,
+  regValidate.accountUpdateRules(),
+  regValidate.checkAccountUpdateData,
+  utilities.handleErrors(accountController.updateAccount)
+)
+
+// Process password update
+router.post(
+  "/update-password/",
+  utilities.checkLogin,
+  regValidate.passwordRules(),
+  regValidate.checkPasswordData,
+  utilities.handleErrors(accountController.updatePassword)
 )
 
 module.exports = router
