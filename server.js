@@ -12,6 +12,7 @@ const accountRoute = require("./routes/accountRoute")
 const session = require("express-session")
 const pool = require("./database/")
 const bodyParser = require("body-parser")
+const cookieParser = require("cookie-parser")
 
 const app = express()
 
@@ -20,22 +21,23 @@ const app = express()
  * ************************/
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(cookieParser())
 
 app.use(session({
-  store: new (require('connect-pg-simple')(session))({
+  store: new (require("connect-pg-simple")(session))({
     createTableIfMissing: true,
     pool,
   }),
   secret: process.env.SESSION_SECRET,
   resave: true,
   saveUninitialized: true,
-  name: 'sessionId',
+  name: "sessionId",
 }))
 
 // Flash messages (MUST be before routes)
-app.use(require('connect-flash')())
+app.use(require("connect-flash")())
 app.use(function(req, res, next){
-  res.locals.messages = require('express-messages')(req, res)
+  res.locals.messages = require("express-messages")(req, res)
   next()
 })
 

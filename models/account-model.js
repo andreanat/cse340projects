@@ -10,7 +10,17 @@ async function registerAccount(
   account_password
 ){
   try {
-    const sql = "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *"
+    const sql = `
+      INSERT INTO account (
+        account_firstname,
+        account_lastname,
+        account_email,
+        account_password,
+        account_type
+      )
+      VALUES ($1, $2, $3, $4, 'Client')
+      RETURNING *
+    `
     return await pool.query(sql, [
       account_firstname,
       account_lastname,
@@ -22,4 +32,30 @@ async function registerAccount(
   }
 }
 
-module.exports = { registerAccount }
+/* *****************************
+ *   Get account by email
+ * *************************** */
+async function getAccountByEmail(account_email) {
+  try {
+    const result = await pool.query(
+      `SELECT 
+        account_id,
+        account_firstname,
+        account_lastname,
+        account_email,
+        account_password,
+        account_type
+      FROM account
+      WHERE account_email = $1`,
+      [account_email]
+    )
+    return result.rows[0]
+  } catch (error) {
+    throw new Error("No matching email found")
+  }
+}
+
+module.exports = {
+  registerAccount,
+  getAccountByEmail
+}
