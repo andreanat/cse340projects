@@ -24,6 +24,7 @@ router.post(
   utilities.handleErrors(accountController.registerAccount)
 )
 
+// Login process
 router.post(
   "/login",
   regValidate.loginRules(),
@@ -31,8 +32,10 @@ router.post(
   utilities.handleErrors(accountController.accountLogin)
 )
 
+// 🔐 Protected account management route
 router.get(
   "/",
+  utilities.checkLogin,
   utilities.handleErrors(accountController.buildManagement)
 )
 
