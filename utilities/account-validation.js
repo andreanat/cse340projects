@@ -44,16 +44,15 @@ validate.registationRules = () => {
 }
 
 /* ******************************
- * Check data and return errors or continue to registration
+ * Check registration data
  * ***************************** */
 validate.checkRegData = async (req, res, next) => {
   const { account_firstname, account_lastname, account_email } = req.body
-  let errors = []
-  errors = validationResult(req)
+  let errors = validationResult(req)
 
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav()
-    res.render("account/register", {
+    return res.render("account/register", {
       errors,
       title: "Register",
       nav,
@@ -61,7 +60,45 @@ validate.checkRegData = async (req, res, next) => {
       account_lastname,
       account_email,
     })
-    return
+  }
+  next()
+}
+
+/* **********************************
+ *  Login Validation Rules
+ * ********************************* */
+validate.loginRules = () => {
+  return [
+    body("account_email")
+      .trim()
+      .escape()
+      .notEmpty()
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Valid email required."),
+
+    body("account_password")
+      .trim()
+      .notEmpty()
+      .withMessage("Password required."),
+  ]
+}
+
+/* ******************************
+ * Check login data
+ * ***************************** */
+validate.checkLoginData = async (req, res, next) => {
+  const { account_email } = req.body
+  let errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav()
+    return res.render("account/login", {
+      errors,
+      title: "Login",
+      nav,
+      account_email,
+    })
   }
   next()
 }
