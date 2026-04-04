@@ -2,7 +2,14 @@
   <div class="container hdr">
     <a class="brand" href="/"><h1>CSE Motors</h1></a>
 
-    <a class="account-link" href="/account/login">My Account</a>
+    <% if (locals.loggedin && locals.accountData) { %>
+      <a class="account-link" href="/account/">
+        Welcome <%= locals.accountData.account_firstname %>
+      </a>
+      <a class="account-link" href="/account/logout">Logout</a>
+    <% } else { %>
+      <a class="account-link" href="/account/login">My Account</a>
+    <% } %>
 
     <button class="menu-btn" aria-label="Toggle menu" hidden>☰</button>
   </div>
