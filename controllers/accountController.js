@@ -7,7 +7,7 @@ require("dotenv").config()
 /* ****************************************
  *  Deliver login view
  * *************************************** */
-async function buildLogin(req, res, next) {
+async function buildLogin(req, res) {
   let nav = await utilities.getNav()
   res.render("account/login", {
     title: "Login",
@@ -19,7 +19,7 @@ async function buildLogin(req, res, next) {
 /* ****************************************
  *  Deliver registration view
  * *************************************** */
-async function buildRegister(req, res, next) {
+async function buildRegister(req, res) {
   let nav = await utilities.getNav()
   res.render("account/register", {
     title: "Register",
@@ -31,7 +31,7 @@ async function buildRegister(req, res, next) {
 /* ****************************************
  *  Deliver account management view
  * *************************************** */
-async function buildManagement(req, res, next) {
+async function buildManagement(req, res) {
   let nav = await utilities.getNav()
   res.render("account/management", {
     title: "Account Management",
@@ -50,7 +50,7 @@ async function registerAccount(req, res) {
     account_firstname,
     account_lastname,
     account_email,
-    account_password
+    account_password,
   } = req.body
 
   let hashedPassword
@@ -62,6 +62,9 @@ async function registerAccount(req, res) {
       title: "Register",
       nav,
       errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
     })
   }
 
@@ -81,6 +84,7 @@ async function registerAccount(req, res) {
       title: "Login",
       nav,
       errors: null,
+      account_email,
     })
   } else {
     req.flash("notice", "Sorry, the registration failed.")
@@ -88,6 +92,9 @@ async function registerAccount(req, res) {
       title: "Register",
       nav,
       errors: null,
+      account_firstname,
+      account_lastname,
+      account_email,
     })
   }
 }
@@ -111,7 +118,12 @@ async function accountLogin(req, res) {
   }
 
   try {
-    if (await bcrypt.compare(account_password, accountData.account_password)) {
+    const passwordMatch = await bcrypt.compare(
+      account_password,
+      accountData.account_password
+    )
+
+    if (passwordMatch) {
       delete accountData.account_password
 
       const accessToken = jwt.sign(
@@ -123,26 +135,26 @@ async function accountLogin(req, res) {
       if (process.env.NODE_ENV === "development") {
         res.cookie("jwt", accessToken, {
           httpOnly: true,
-          maxAge: 3600000
+          maxAge: 3600000,
         })
       } else {
         res.cookie("jwt", accessToken, {
           httpOnly: true,
           secure: true,
-          maxAge: 3600000
+          maxAge: 3600000,
         })
       }
 
       return res.redirect("/account/")
-    } else {
-      req.flash("notice", "Please check your credentials and try again.")
-      return res.status(400).render("account/login", {
-        title: "Login",
-        nav,
-        errors: null,
-        account_email,
-      })
     }
+
+    req.flash("notice", "Please check your credentials and try again.")
+    return res.status(400).render("account/login", {
+      title: "Login",
+      nav,
+      errors: null,
+      account_email,
+    })
   } catch (error) {
     throw new Error("Access Forbidden")
   }
@@ -153,5 +165,5 @@ module.exports = {
   buildRegister,
   buildManagement,
   registerAccount,
-  accountLogin
+  accountLogin,
 }

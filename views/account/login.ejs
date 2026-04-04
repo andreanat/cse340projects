@@ -17,6 +17,7 @@
     name="account_email"
     id="account_email"
     required
+    <% if (locals.account_email) { %>value="<%= locals.account_email %>"<% } %>
   >
 
   <label for="account_password">Password</label>
