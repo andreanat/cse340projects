@@ -1,5 +1,14 @@
 <h1><%= title %></h1>
 
-<div class="vehicle-detail-container">
-  <%- vehicleHTML %>
-</div>
+<%- messages() %>
+
+<%- vehicleHTML %>
+
+<% if (locals.loggedin && locals.accountData) { %>
+  <form action="/account/favorites/add" method="post">
+    <input type="hidden" name="inv_id" value="<%= inv_id %>">
+    <button type="submit">Add to Favorites</button>
+  </form>
+<% } else { %>
+  <p><a href="/account/login">Log in</a> to save this vehicle to your favorites.</p>
+<% } %>

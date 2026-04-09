@@ -2,6 +2,7 @@ const invModel = require("../models/inventory-model")
 const utilities = require("../utilities/")
 
 const invController = {}
+
 invController.buildManagement = async function (req, res, next) {
   const nav = await utilities.getNav()
 
@@ -41,7 +42,8 @@ invController.buildByInventoryId = async function (req, res, next) {
     res.render("inventory/detail", {
       title: `${data.inv_make} ${data.inv_model}`,
       nav,
-      vehicleHTML
+      vehicleHTML,
+      inv_id: data.inv_id,
     })
   } catch (error) {
     next(error)
@@ -51,6 +53,7 @@ invController.buildByInventoryId = async function (req, res, next) {
 invController.triggerError = async function (req, res, next) {
   throw new Error("Intentional 500 error")
 }
+
 invController.buildAddClassification = async function (req, res, next) {
   const nav = await utilities.getNav()
 

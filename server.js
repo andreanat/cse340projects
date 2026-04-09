@@ -13,7 +13,7 @@ const session = require("express-session")
 const pool = require("./database/")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
-
+const favoriteRoute = require("./routes/favoriteRoute")
 const app = express()
 
 /* ***********************
@@ -61,6 +61,7 @@ app.use(express.static(path.join(__dirname, "public")))
  * ************************/
 app.use("/account", accountRoute)
 app.use("/inv", invRoute)
+app.use("/account/favorites", favoriteRoute)
 
 /* ***********************
  * Home route
